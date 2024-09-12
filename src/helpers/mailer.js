@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import User from './models/userModel';
+import User from '../models/userModel';
 import { uuid } from 'uuidv4';
 
 export const sendEmail = async ({ email, emailtype, userId }) => {
