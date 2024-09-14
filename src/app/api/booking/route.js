@@ -1,6 +1,7 @@
 import { Connect } from "@/dbConfig/dbconfig";
 import { jwtdata } from "@/helpers/jwtdata";
-import Request from "@/models/reqModel";
+import Member from "@/models/memberModel";
+import User from "@/models/userModel";
 import { NextResponse } from "next/server";
 
 Connect()
@@ -8,42 +9,89 @@ Connect()
 export async function POST(req) {
     try {
         const body = await req.json()
-        const { duration, amount} = body
+        const { firstName, lastName, phoneNumber, email, duration, amount }  = body 
         const data = jwtdata(req)
-        const existingRequest = await Request.findOne({ email : data.email})
-        if(existingRequest){
-            return NextResponse.json({
-                message : "Request already sent"
-            },{
-                status : 208
-            })
+        const existingUser = await User.findOne({ email });
+        
+        
+        console.log(existingUser)
+
+        if (existingUser) {
+            const existingMember = await Member.findOne({ email: existingUser.email })
+            try {
+                if(existingMember) {
+                    return NextResponse.json({
+                        message: "You are already a member"
+                    }, {
+                        status: 208
+                    })
+                }
+                const newMember = await new Member({
+                    firstName: existingUser.firstName,
+                    lastName: existingUser.lastName,
+                    phoneNumber: existingUser.phoneNumber,
+                    email : existingUser.email,
+                    duration: duration,
+                    amount: amount
+                })
+                await newMember.save()
+                return NextResponse.json({
+                    message: "Membership Grunted", newMember
+                }, {
+                    status: 200
+                })
+            } catch (error) {
+                return NextResponse.json({
+                    message:  error.message
+                }, {
+                    status: 500
+                })
+            }
+
         }
-        console.log(data)
-        const request = new Request({
-            email : data.email,
-            duration,
-            amount
+        else if (!existingUser) {
+            try {
+                const existingMember = await Member.findOne({ email })
+                if (existingMember) {
+                    return NextResponse.json({
+                        message: "You are already a member"
+                    }, {
+                        status: 208
+                    })
+                }
+                const newMember = await new Member({
+                    firstName: firstName,
+                    lastName: lastName,
+                    phoneNumber: phoneNumber,
+                    email : email,
+                    duration: duration,
+                    amount: amount
+                })
+                await newMember.save()
+                return NextResponse.json({
+                    message: "Membership Grunted to non user", newMember
+                }, {
+                    status: 200
+                })
+            } catch (error) {
+                return NextResponse.json({
+                    message:  error.message
+                }, {
+                    status: 500
+                })
+            }
 
-        })
-        await request.save()
+        }
 
-        
 
-        return NextResponse.json({
-            message : "Request sent"
-        },{
-            status : 200
-        })
 
-        
-        
-        
+
     } catch (error) {
         return NextResponse.json({
-            error : error.message
-        },{
-            status : 500
+            error: error.message
+        }, {
+            status: 500
         })
     }
-    
+
 }
