@@ -9,7 +9,7 @@ Connect();
 export async function POST(req, res) {
     try {
         const body = await req.json();
-        const { firstName, lastName, age, email, password, phoneNumber, address } = body
+        const { firstName, lastName, age,gender, email, password, phoneNumber, address } = body
         console.log(body);
         const existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -26,6 +26,7 @@ export async function POST(req, res) {
             firstName,
             lastName,
             age,
+            gender,
             email,
             password: hashedPassword,
             phoneNumber,

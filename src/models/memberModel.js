@@ -5,10 +5,12 @@ const memberSchems = new  mongoose.Schema({
     lastName : { type : String, required : true},
     phoneNumber : { type : Number, required : true},
     email : { type : String, required: true},
-    duration : { type : String, required : true},
+    gender : {type : String, required : true},
+    duration : { type : Number, required : true},
     startDate : { type : Date, required : true, default : Date.now},
-    endDate : {type : Date, require : true, default : Date.now},
-    amount : { type :Number, required : true}
+    endDate : {type : Date},
+    amount : { type :Number, required : true},
+    isMember : { type : Boolean, default : true}
 })
 
 mongoose.models = {}

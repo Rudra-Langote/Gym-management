@@ -9,16 +9,17 @@ Connect()
 export async function POST(req) {
     try {
         const body = await req.json()
-        const { firstName, lastName, phoneNumber, email, duration, amount }  = body 
+        const { firstName, lastName, phoneNumber, email,gender, duration, amount }  = body 
         const data = jwtdata(req)
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email :  data.email });
         
         
         console.log(existingUser)
 
         if (existingUser) {
-            const existingMember = await Member.findOne({ email: existingUser.email })
+            
             try {
+                const existingMember = await Member.findOne({ email: existingUser.email })
                 if(existingMember) {
                     return NextResponse.json({
                         message: "You are already a member"
@@ -31,8 +32,10 @@ export async function POST(req) {
                     lastName: existingUser.lastName,
                     phoneNumber: existingUser.phoneNumber,
                     email : existingUser.email,
+                    gender : existingUser.gender,
                     duration: duration,
-                    amount: amount
+                    amount: amount,
+                    endDate : Date.now() + (2592000000*duration),
                 })
                 await newMember.save()
                 return NextResponse.json({
@@ -64,7 +67,9 @@ export async function POST(req) {
                     lastName: lastName,
                     phoneNumber: phoneNumber,
                     email : email,
+                    gender : gender,
                     duration: duration,
+                    endDate : Date.now() + (2592000000*duration),
                     amount: amount
                 })
                 await newMember.save()

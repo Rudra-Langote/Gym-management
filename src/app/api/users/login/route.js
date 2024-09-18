@@ -43,7 +43,8 @@ export async function POST(req, res) {
 
         const tokenData = {
             id: existinguser._id,
-            email: existinguser.email
+            email: existinguser.email,
+            isAdmin : existinguser.isAdmin
         }
         const token = jwt.sign(tokenData, process.env.TOCAN_SECRET, { expiresIn: '5d' })
         const response = NextResponse.json({
