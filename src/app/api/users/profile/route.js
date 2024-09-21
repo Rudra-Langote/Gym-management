@@ -17,7 +17,7 @@ export async function POST(req) {
 
     } catch (error) {
         return NextResponse.json({
-            error : error.message
+            error: error.message
         }, {
             status: 500
         })
@@ -28,20 +28,54 @@ export async function PUT(req) {
     try {
         const data = jwtdata(req)
         const body = await req.json();
-        const { firstName, lastName, age,gender, phoneNumber, address } = body
+        const { firstName, lastName, age, gender, phoneNumber, address } = body
+        await User.findOneAndUpdate({
+            "email": data.email
+        }, {
+            $set: {
+                firstName,
+                lastName,
+                age,
+                gender,
+                phoneNumber,
+                address
+            }
+        })
+
 
         return NextResponse.json({
-            user: updatedUser
+            user: await User.findOne({ email: data.email }).select("-password")
         }, {
             status: 200
         })
 
-        
+
     } catch (error) {
         return NextResponse.json({
-            error : error.message
+            error: error.message
         }, {
             status: 500
         })
     }
+}
+
+
+export async function DELETE(req) {
+    try {
+        const data = jwtdata(req)
+        await User.findOneAndDelete({ email: data.email });
+        return NextResponse.json({
+            message : "Account deleted"
+        }, {
+            status: 200
+        })
+    } catch (error) {
+        return NextResponse.json({
+            error: error.message
+        }, {
+            status: 500
+        })
+    }
+
+
 }
