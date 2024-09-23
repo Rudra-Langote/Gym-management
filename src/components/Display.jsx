@@ -3,7 +3,6 @@ import React from 'react'
 const Display = () => {
     return (
         <div className="relative h-screen overflow-hidden">
-            {/* Video Background */}
             <video
                 autoPlay
                 loop
@@ -40,8 +39,6 @@ const Display = () => {
 
 
             </div>
-
-            {/* Overlay (Optional) */}
             <div className="absolute inset-0 bg-black opacity-50 z-5"></div>
         </div>
 

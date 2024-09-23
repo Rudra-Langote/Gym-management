@@ -52,14 +52,14 @@ export async function POST(req) {
 export async function PUT(req) {
 
     try {
-        const body = req.json()
+        const body = await req.json()
         const { email, duration } = body
-        const dsd = Date.now() + (2592000000*duration)
         await Member.updateOne({ email }, {
             $set: {
                 isMember: true,
                 startDate: Date.now(),
-                endDate: dsd
+                duration,
+                endDate: Date.now() + (2592000000 * duration)
             }
         })
         return NextResponse.json({
