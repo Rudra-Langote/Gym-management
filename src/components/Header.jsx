@@ -8,7 +8,7 @@ const Header = () => {
             <label className=' text-white text-4xl' htmlFor="logo"><span className=' font-bold text-yellow-300' >RR</span><span className=' font-extralight'>Fitness</span></label>
         </div>
         <div>
-            <ul className=' flex gap-[50px] text-white text-xl'>
+            <ul className=' hidden md:flex gap-[50px] text-white text-xl'>
                 <li className=' cursor-pointer hover:text-yellow-300 duration-[0.3s] '>Home</li>
                 <li className=' cursor-pointer hover:text-yellow-300 duration-[0.3s] '>About</li>
                 <li className=' cursor-pointer hover:text-yellow-300 duration-[0.3s] '>Packegs</li>

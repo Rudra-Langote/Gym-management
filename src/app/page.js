@@ -3,6 +3,7 @@ import Service from "@/components/Service";
 import clin from '../../public/Cline.jpg'
 import qulity from '../../public/highqulity.jpg'
 import days from '../../public/6days.png'
+import Cards from "@/components/Cards";
 
 
 
@@ -23,6 +24,22 @@ export default function Home() {
           <Service img={qulity} head="Qulity and Letest Equiptment" disc="Our gym is equipped with the latest, high-quality machines and tools to enhance your workout experience. From cardio to strength training, we provide top-tier equipment designed to help you achieve your fitness goals efficiently and safely" />
         </div>
       </section>
+      <section>
+        <div className=" w-[100%] p-5 flex flex-col items-center justify-center">
+          <h1 className=" font-semibold italic md:text-8xl flex gap-[70px] text-white">
+            <span>Be</span>
+            <span>The</span>
+            <span className=" text-yellow-300">Beast</span>
+          </h1>
+          <div className=" flex flex-wrap items-center justify-center gap-2 w-[100%] h-[80vh]">
+            <Cards/>
+            <Cards/>
+            <Cards/>
+            <Cards/>
+          </div>
+        </div>
+      </section>
+
     </main>
   );
 }
