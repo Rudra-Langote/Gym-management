@@ -4,6 +4,11 @@ import clin from '../../public/Cline.jpg'
 import qulity from '../../public/highqulity.jpg'
 import days from '../../public/6days.png'
 import Cards from "@/components/Cards";
+import cd1 from '../../public/Card1.jpg'
+import cd2 from '../../public/Card2.jpg'
+import cd3 from '../../public/Card3.jpg'
+import cd4 from '../../public/Card4.jpg'
+import Blog from "@/components/Blog";
 
 
 
@@ -25,18 +30,23 @@ export default function Home() {
         </div>
       </section>
       <section>
-        <div className=" w-[100%] p-5 flex flex-col items-center justify-center">
-          <h1 className=" font-semibold italic md:text-8xl flex gap-[70px] text-white">
-            <span>Be</span>
-            <span>The</span>
-            <span className=" text-yellow-300">Beast</span>
+        <div id="Package" className=" w-[100%] flex gap-5 flex-col items-center justify-center">
+          <h1 className=" font-extrabold text-center   text-8xl  md:text-8xl flex flex-col md:flex-row md:gap-[70px] gap-[10px] text-white">
+            <ul className=" md:flex">
+              <li>Be</li>
+              <li className=" text-yellow-300">The</li>
+              <li >Beast</li>
+            </ul>
           </h1>
-          <div className=" flex flex-wrap items-center justify-center gap-2 w-[100%] h-[80vh]">
-            <Cards/>
-            <Cards/>
-            <Cards/>
-            <Cards/>
+          <div className=" flex flex-col md:flex-row md:flex-wrap m-2   items-center justify-center gap-2 w-[100%] h-auto md:h-[90vh]">
+            <Cards img={cd1} title="QuickGain" duration="1 Month" disc1="Flexible Hours" disc2="Mon-Sat"  price="Only ₹700"  />
+            <Cards img={cd2} title="BuildPack" duration="3 Month" disc1="Flexible Hours" disc2="Mon-Sat"  price="Only ₹1500"/>
+            <Cards img={cd3} title="ProGain" duration="6 Month" disc1="Flexible Hours" disc2="Mon-Sat"  price="Only ₹2999"/>
+            <Cards img={cd4} title="PowerPack" duration="12 Month" disc1="Flexible Hours" disc2="Mon-Sat"  price="Only ₹4999"/>
           </div>
+        </div>
+        <div>
+          <Blog/>
         </div>
       </section>
 

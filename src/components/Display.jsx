@@ -2,7 +2,7 @@ import React from 'react'
 
 const Display = () => {
     return (
-        <div className="relative h-screen overflow-hidden">
+        <div id='Top' className="relative h-screen overflow-hidden">
             <video
                 autoPlay
                 loop
