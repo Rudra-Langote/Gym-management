@@ -1,6 +1,19 @@
+"use client"
+import { useRouter } from 'next/navigation';
 import React from 'react'
 
 const Display = () => {
+    const router = useRouter()
+
+    const sendSignup = () => {
+        router.push("/signup");
+      };
+
+      const sendLogin = () => {
+        router.push("/login");
+      };
+
+
     return (
         <div id='Top' className="relative h-screen overflow-hidden">
             <video
@@ -14,27 +27,27 @@ const Display = () => {
             </video>
 
 
-            <div className="relative z-10 flex flex-col gap-[30px] items-center justify-center h-full">
-                <div className=' relative   h-[17%] w-[45%]'>
-                    <h1 className="text-white text-5xl absolute left-0 top-0 font-bold">Once You See <span className=' text-yellow-300'>Results</span></h1>
-                    <h1 className="text-white text-5xl absolute  right-0 bottom-0 font-bold">It <span className=' text-yellow-300'>Becomes</span> An Addiction</h1>
-                </div>
-                <div>
-                    <div className=' relative bottom-0  h-[17%] w-[45%]'>
-                        <ul className=' flex gap-[90px] list-disc text-white text-xl'>
-                            <li className=' text-yellow-300'>Strength</li>
-                            <li>Endurance</li>
-                            <li className=' text-yellow-300'>Performance</li>
-                        </ul>
-                    </div>
+            <div className="relative z-10 flex flex-col md:gap-[30px] items-center justify-center h-full">
+                <div className='   relative  text-3xl  md:text-5xl h-[11%] w-[90%] md:h-[17%] md:w-[45%]'>
+                    <h1 className="text-white  absolute left-0 top-0 font-bold">Once You See <span className=' text-yellow-500'>Results</span></h1>
+                    <h1 className="text-white  absolute right-0 bottom-0  font-bold">It <span className=' text-yellow-500'>Becomes</span> An Addiction</h1>
                 </div>
 
-                <div className=' mt-[50px] relative flex gap-[50px] items-center justify-center  h-[10%] w-[45%]'>
-                    <button className=' border-yellow-300 bg-yellow-300 rounded-sm hover:bg-white hover:text-black hover:border-0 border-[2px] duration-[0.3s] text-white h-[70%] w-[25%]'>Be a Member</button>
-                    <button className=' border-2 rounded-sm text-white hover:bg-white hover:text-black h-[70%] w-[25%] duration-[0.3s]'>Allread a Member</button>
+                <div className=' relative bottom-0 flex justify-center items-center p-2 h-[17%] md:w-[45%]'>
+                    <ul className=' flex gap-[40px] md:gap-[90px] list-disc text-white text-md md:text-xl'>
+                        <li className=' text-yellow-500'>Strength</li>
+                        <li>Endurance</li>
+                        <li className=' text-yellow-500'>Performance</li>
+                    </ul>
                 </div>
 
-                
+
+                <div className='  md:mt-[50px] relative flex gap-[50px] items-center justify-center w-[90%]  h-[15%] md:h-[10%] md:w-[45%]'>
+                    <button onClick={sendSignup} className=' md:p-2 text-center border-yellow-500 bg-yellow-500 rounded-sm hover:bg-white hover:text-black hover:border-0 border-[2px] duration-[0.3s] text-white h-[40%] w-[40%] md:h-[70%] md:w-[25%]'>Be a Member</button>
+                    <button onClick={sendLogin} className=' md:p-2 border-2 rounded-sm text-white hover:bg-white hover:text-black  h-[40%] w-[40%] md:h-[70%] md:w-[25%] duration-[0.3s]'>Allread a Member</button>
+                </div>
+
+
 
 
 

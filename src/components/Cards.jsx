@@ -8,7 +8,7 @@ const Cards = ({img, title, duration, disc1, disc2, price }) => {
         <div className=" overflow-hidden border relative w-[90%] h-[250px] md:w-[40%] md:h-[45%]">
             <Image className=' absolute -left-[100px] md:-left-[60px] h-[100%]' src={img} />
 
-            <div className=' w-[100%] h-[200%] md:-rotate-[45deg] absolute top-0 -right-[160px] md:-right-[140px] z-10 bg-yellow-300 '>
+            <div className=' w-[100%] h-[200%] md:-rotate-[55deg] absolute -top-5 -right-[160px] md:-right-[140px] z-10 bg-yellow-500 '>
 
             </div>
             <div className=' z-20 w-[40%]  font-bold text-black absolute right-2 top-5'>

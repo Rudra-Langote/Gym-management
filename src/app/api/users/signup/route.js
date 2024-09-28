@@ -14,7 +14,7 @@ export async function POST(req, res) {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return NextResponse.json({
-                message: "User allready exiest"
+                error: "User allready exiest"
             },
                 {
                     status: 400
@@ -33,9 +33,9 @@ export async function POST(req, res) {
             address
         });
         const saveUser = await newUser.save();
-        await sendEmail({email: email, emailtype: "VERIFY", userId: saveUser._id })
+        await sendEmail({email: email, emailType: "VERIFY", userId: saveUser._id })
         return NextResponse.json(
-            { message: "Signup Successfully!!" },
+            { message: "Mail sent for verification" },
             { status: 200 }
         )
 

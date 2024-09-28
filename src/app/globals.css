@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 body{
- background-color: black;
+ --tw-bg-opacity: 1;
+ background-color: #030712;
  height: 100%;
  width: 100%;
  margin: 0;
@@ -11,5 +12,6 @@ body{
 }
 html {
     scroll-behavior: smooth;
+    
   }
   

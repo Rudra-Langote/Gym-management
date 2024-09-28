@@ -5,6 +5,7 @@ import bycript from 'bcryptjs'
 import  jwt  from "jsonwebtoken";
 import { sendEmail } from "@/helpers/mailer";
 
+
 Connect();
 
 export async function POST(req, res) {
@@ -32,7 +33,7 @@ export async function POST(req, res) {
             })
         }
         else if(!existinguser.isVerified){
-            await sendEmail({email: email, emailtype: "VERIFY", userId: existinguser._id })
+            await sendEmail({email: email, emailType: "VERIFY", userId: existinguser._id })
             return NextResponse.json({
                 error: "User not vefied"
             },

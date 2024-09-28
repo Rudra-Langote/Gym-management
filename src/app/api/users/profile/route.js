@@ -8,7 +8,7 @@ Connect()
 export async function POST(req) {
     try {
         const data = jwtdata(req)
-        const existingUser = await User.findOne({ email: data.email }).select("-password");
+        const existingUser = await User.findOne({ email: data.email }).select("-password").select("-isVerified").select("-__v").select("-isAdmin").select("-_id");
         return NextResponse.json({
             user: existingUser
         }, {

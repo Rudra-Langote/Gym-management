@@ -2,6 +2,7 @@ import { Connect } from "@/dbConfig/dbconfig";
 import User from "@/models/userModel";
 import { NextResponse } from "next/server";
 
+
 Connect();
 
 export async function POST(req, res) {

@@ -1,20 +1,21 @@
 import nodemailer from 'nodemailer';
 import User from '../models/userModel';
-import { uuid } from 'uuidv4';
+import { v1 as uuidv1} from 'uuid'
 
-export const sendEmail = async ({ email, emailtype, userId }) => {
+
+export const sendEmail = async ({ email, emailType, userId }) => {
 
     try {
-        const uuidTocken = uuid();
-        if (emailtype === "VERIFY") {
+        const uuidToken = uuidv1();
+        if (emailType === "VERIFY") {
 
             await User.findByIdAndUpdate(userId,
-                { verifiedToken: uuidTocken, verifiedTokenExpire: Date.now() + 3600000 })
+                { verifiedToken: uuidToken, verifiedTokenExpire: Date.now() + 3600000 })
 
 
-        } else if (emailtype === "FORGOT") {
+        } else if (emailType === "FORGOT") {
             await User.findByIdAndUpdate(userId,
-                { frogotPasswordToken: uuidTocken, forgotPasswordTokenExpire: Date.now() + 1800000 })
+                { frogotPasswordToken: uuidToken, forgotPasswordTokenExpire: Date.now() + 1800000 })
         }
         const transport = nodemailer.createTransport({
             host: "sandbox.smtp.mailtrap.io",
@@ -28,7 +29,7 @@ export const sendEmail = async ({ email, emailtype, userId }) => {
         const mailOptions = {
             from: 'langoterudra2005@gmail.com',
             to: email,
-            subject: emailtype === 'VERIFY' ? "Verify your account" : "Reset your password",
+            subject: emailType === 'VERIFY' ? "Verify your account" : "Reset your password",
             text: "Hello world?",
             html: `<!DOCTYPE html>
 <html>
@@ -39,9 +40,6 @@ export const sendEmail = async ({ email, emailtype, userId }) => {
   <title>Email Confirmation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style type="text/css">
-  /**
-   * Google webfonts. Recommended to include the .woff version for cross-client compatibility.
-   */
   @media screen {
     @font-face {
       font-family: 'Source Sans Pro';
@@ -58,38 +56,24 @@ export const sendEmail = async ({ email, emailtype, userId }) => {
     }
   }
 
-  /**
-   * Avoid browser level font resizing.
-   * 1. Windows Mobile
-   * 2. iOS / OSX
-   */
   body,
   table,
   td,
   a {
-    -ms-text-size-adjust: 100%; /* 1 */
-    -webkit-text-size-adjust: 100%; /* 2 */
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
   }
 
-  /**
-   * Remove extra space added to tables and cells in Outlook.
-   */
   table,
   td {
     mso-table-rspace: 0pt;
     mso-table-lspace: 0pt;
   }
 
-  /**
-   * Better fluid images in Internet Explorer.
-   */
   img {
     -ms-interpolation-mode: bicubic;
   }
 
-  /**
-   * Remove blue links for iOS devices.
-   */
   a[x-apple-data-detectors] {
     font-family: inherit !important;
     font-size: inherit !important;
@@ -99,9 +83,6 @@ export const sendEmail = async ({ email, emailtype, userId }) => {
     text-decoration: none !important;
   }
 
-  /**
-   * Fix centering issues in Android 4.4.
-   */
   div[style*="margin: 16px 0;"] {
     margin: 0 !important;
   }
@@ -113,9 +94,6 @@ export const sendEmail = async ({ email, emailtype, userId }) => {
     margin: 0 !important;
   }
 
-  /**
-   * Collapse table borders to avoid space between cells.
-   */
   table {
     border-collapse: collapse !important;
   }
@@ -136,84 +114,47 @@ export const sendEmail = async ({ email, emailtype, userId }) => {
 </head>
 <body style="background-color: #e9ecef;">
 
-  <!-- start preheader -->
   <div class="preheader" style="display: none; max-width: 0; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: #fff; opacity: 0;">
     A preheader is the short summary text that follows the subject line when an email is viewed in the inbox.
   </div>
-  <!-- end preheader -->
 
-  <!-- start body -->
   <table border="0" cellpadding="0" cellspacing="0" width="100%">
 
-    <!-- start logo -->
     <tr>
       <td align="center" bgcolor="#e9ecef">
-        <!--[if (gte mso 9)|(IE)]>
-        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-        <tr>
-        <td align="center" valign="top" width="600">
-        <![endif]-->
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
           <tr>
             <td align="center" valign="top" style="padding: 36px 24px;">
-              <a href="https://sendgrid.com" target="_blank" style="display: inline-block;">
-                <img src="./img/paste-logo-light@2x.png" alt="Logo" border="0" width="48" style="display: block; width: 48px; max-width: 48px; min-width: 48px;">
+              <a href="${process.env.DOMAIN}" target="_blank" style="display: inline-block; text-decoration: none;">
+                <label border="0" width="48" style="display: block; width: 48px; max-width: 48px; min-width: 48px; className=' text-white text-6xl md:text-4xl' htmlFor="logo"><span className=' font-bold text-yellow-500' >RK</span><span className=' font-extralight'>Fitness</span></label>
               </a>
             </td>
           </tr>
         </table>
-        <!--[if (gte mso 9)|(IE)]>
-        </td>
-        </tr>
-        </table>
-        <![endif]-->
       </td>
     </tr>
-    <!-- end logo -->
 
-    <!-- start hero -->
     <tr>
       <td align="center" bgcolor="#e9ecef">
-        <!--[if (gte mso 9)|(IE)]>
-        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-        <tr>
-        <td align="center" valign="top" width="600">
-        <![endif]-->
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;">
-              <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">${emailtype === 'VERIFY' ? "Confirm Your Email Address" : "Reset your password"}</h1>
+              <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">${emailType === 'VERIFY' ? "Confirm Your Email Address" : "Reset your password"}</h1>
             </td>
           </tr>
         </table>
-        <!--[if (gte mso 9)|(IE)]>
-        </td>
-        </tr>
-        </table>
-        <![endif]-->
       </td>
     </tr>
-    <!-- end hero -->
 
-    <!-- start copy block -->
     <tr>
       <td align="center" bgcolor="#e9ecef">
-        <!--[if (gte mso 9)|(IE)]>
-        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-        <tr>
-        <td align="center" valign="top" width="600">
-        <![endif]-->
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
-
-          <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-              <p style="margin: 0;">${emailtype === 'VERIFY' ? "Tap the button below to confirm your email address. If you didn't create an account with <a href='https://sendgrid.com'>Paste</a>, you can safely delete this email." : "Tap the button below to reset your password. If you didn't create an account with <a href='https://sendgrid.com'>Paste</a>, you can safely delete this email."}</p>
+              <p style="margin: 0;">${emailType === 'VERIFY' ? `Tap the button below to confirm your email address. If you didn't create an account with <a href='${process.env.DOMAIN}'>R K Fitness</a>, you can safely delete this email.` : `Tap the button below to reset your password. If you didn't create an account with <a href='${process.env.DOMAIN}'>R K Fitness</a>, you can safely delete this email.`}</p>
             </td>
           </tr>
-          <!-- end copy -->
 
-          <!-- start button -->
           <tr>
             <td align="left" bgcolor="#ffffff">
               <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -221,8 +162,8 @@ export const sendEmail = async ({ email, emailtype, userId }) => {
                   <td align="center" bgcolor="#ffffff" style="padding: 12px;">
                     <table border="0" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
-                          <a href="https://sendgrid.com" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">${emailtype === 'VERIFY' ? "Confirm Your Email Address" : "Reset your password"}</a>
+                        <td align="center" bgcolor="#eab308" style="border-radius: 6px;">
+                          <a href="${emailType === 'VERIFY' ? `${process.env.DOMAIN}/verify?token=${uuidToken}` : `${process.env.DOMAIN}/newpassword?token=${uuidToken}`}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">${emailType === 'VERIFY' ? "Confirm Your Email Address" : "Reset your password"}</a>
                         </td>
                       </tr>
                     </table>
@@ -231,74 +172,46 @@ export const sendEmail = async ({ email, emailtype, userId }) => {
               </table>
             </td>
           </tr>
-          <!-- end button -->
 
-          <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
               <p style="margin: 0;">If that doesn't work, copy and paste the following link in your browser:</p>
-              <p style="margin: 0;"><a href="https://sendgrid.com" target="_blank">https://same-link-as-button.url/xxx-xxx-xxxx</a></p>
+              <p style="margin: 0;"><a href="${emailType === 'VERIFY' ? `${process.env.DOMAIN}/verify?token=${uuidToken}` : `${process.env.DOMAIN}/newpassword?token=${uuidToken}`}" target="_blank">${emailType === 'VERIFY' ? `${process.env.DOMAIN}/verify?token=${uuidToken}` : `${process.env.DOMAIN}/newpassword?token=${uuidToken}`}</a></p>
             </td>
           </tr>
-          <!-- end copy -->
 
-          <!-- start copy -->
           <tr>
             <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf">
-              <p style="margin: 0;">Cheers,<br> Paste</p>
+              <p style="margin: 0;">Thanks,<br> R K Fitness</p>
             </td>
           </tr>
-          <!-- end copy -->
 
         </table>
-        <!--[if (gte mso 9)|(IE)]>
-        </td>
-        </tr>
-        </table>
-        <![endif]-->
       </td>
     </tr>
-    <!-- end copy block -->
 
-    <!-- start footer -->
     <tr>
       <td align="center" bgcolor="#e9ecef" style="padding: 24px;">
-        <!--[if (gte mso 9)|(IE)]>
-        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-        <tr>
-        <td align="center" valign="top" width="600">
-        <![endif]-->
         <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
 
-          <!-- start permission -->
           <tr>
             <td align="center" bgcolor="#e9ecef" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
-              <p style="margin: 0;">You received this email because we received a request for [type_of_action] for your account. If you didn't request [type_of_action] you can safely delete this email.</p>
+              <p style="margin: 0;">You received this email because we received a request for ${emailType === 'VERIFY' ? "verify your email" : "reset your password"} for your account. If you didn't request ${emailType === 'VERIFY' ? "verify your email" : "reset your password"} you can safely delete this email.</p>
             </td>
           </tr>
-          <!-- end permission -->
 
-          <!-- start unsubscribe -->
           <tr>
             <td align="center" bgcolor="#e9ecef" style="padding: 12px 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 20px; color: #666;">
-              <p style="margin: 0;">To stop receiving these emails, you can <a href="https://sendgrid.com" target="_blank">unsubscribe</a> at any time.</p>
-              <p style="margin: 0;">Paste 1234 S. Broadway St. City, State 12345</p>
+              <p style="margin: 0;">To stop receiving these emails, you can <a href="${process.env.DOMAIN}" target="_blank">unsubscribe</a> at any time.</p>
+              <p style="margin: 0;">street 123</p>
             </td>
           </tr>
-          <!-- end unsubscribe -->
 
         </table>
-        <!--[if (gte mso 9)|(IE)]>
-        </td>
-        </tr>
-        </table>
-        <![endif]-->
       </td>
     </tr>
-    <!-- end footer -->
 
   </table>
-  <!-- end body -->
 
 </body>
 </html>`,

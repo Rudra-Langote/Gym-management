@@ -35,7 +35,7 @@ export async function POST(req) {
         );
 
         return NextResponse.json({
-            message: result
+            user: result
         }, {
             status: 200
         })
