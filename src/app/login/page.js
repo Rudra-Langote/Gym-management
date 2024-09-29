@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+import Cookies from "js-cookie";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -7,7 +8,11 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 
 const Login = () => {
-  const router = useRouter();
+  const router = useRouter()
+  const cookie = Cookies.get('Token')
+  if (cookie) {
+    router.push("/profile")
+  }
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

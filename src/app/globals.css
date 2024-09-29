@@ -2,16 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
- --tw-bg-opacity: 1;
- background-color: #030712;
- height: 100%;
- width: 100%;
- margin: 0;
- padding: 0;
+body {
+  --tw-bg-opacity: 1;
+  background-color: #030712;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
+  --tw-gradient-from: #111827 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(17 24 39 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  --tw-gradient-to: #030712 var(--tw-gradient-to-position);
 }
+
 html {
-    scroll-behavior: smooth;
-    
-  }
-  
+  scroll-behavior: smooth;
+
+}

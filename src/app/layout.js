@@ -1,6 +1,14 @@
 import Footer from "@/components/Footer";
 import "./globals.css";
 import Header from "@/components/Header";
+import { AuthProvider } from "./contexts/AuthContext";
+import { Poppins } from 'next/font/google'
+
+const nunito = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '700','800', '900'],
+  display: 'swap',
+});
 
 export const metadata = {
   title: "RR Fitness",
@@ -10,10 +18,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={` antialiased`}>
-        <Header/>
-        {children}
-        <Footer/>
+      <body className={`${nunito.className} antialiased`}>
+        <AuthProvider>
+          <Header />
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

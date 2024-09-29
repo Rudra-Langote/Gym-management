@@ -31,18 +31,25 @@ export default function Home() {
       </section>
       <section>
         <div id="Package" className=" w-[100%] flex gap-5 flex-col items-center justify-center">
-          <h1 className=" font-extrabold text-center   text-8xl  md:text-8xl flex flex-col md:flex-row md:gap-[70px] gap-[10px] text-white">
-            <ul className=" md:flex">
-              <li>Be</li>
-              <li className=" text-yellow-500">The</li>
-              <li >Beast</li>
+          <h1 className="font-extrabold text-center text-8xl md:text-8xl flex flex-col md:flex-row md:gap-[70px] gap-[10px] text-white transform transition-all duration-500 hover:scale-105">
+            <ul className="md:flex gap-4 md:gap-6">
+              <li className="bg-clip-text text-transparent  bg-white hover:to-yellow-500 transition-colors  duration-500">
+                Be
+              </li>
+              <li className="text-yellow-500 transform hover:-rotate-6 hover:scale-110 transition-all duration-500">
+                The
+              </li>
+              <li className="bg-clip-text text-transparent bg-white transition-colors duration-500 shadow-lg">
+                Beast
+              </li>
             </ul>
           </h1>
+
           <div className=" flex flex-col md:flex-row md:flex-wrap m-2   items-center justify-center gap-2 w-[100%] h-auto md:h-[90vh]">
-            <Cards img={cd1} title="QuickGain" duration="1 Month" disc1="Flexible Hours" disc2="Mon-Sat" price={`Only ₹${700*1}`} />
-            <Cards img={cd2} title="BuildPack" duration="3 Month" disc1="Flexible Hours" disc2="Mon-Sat" price={`Only ₹${700*3}`}  />
-            <Cards img={cd3} title="ProGain" duration="6 Month" disc1="Flexible Hours" disc2="Mon-Sat" price={`Only ₹${700*6}`} />
-            <Cards img={cd4} title="PowerPack" duration="12 Month" disc1="Flexible Hours" disc2="Mon-Sat" price={`Only ₹${700*12}`}  />
+            <Cards img={cd1} title="QuickGain" duration="1 Month" disc1="Flexible Hours" disc2="Mon-Sat" price={`Only ₹${700 * 1}`} />
+            <Cards img={cd2} title="BuildPack" duration="3 Month" disc1="Flexible Hours" disc2="Mon-Sat" price={`Only ₹${700 * 3}`} />
+            <Cards img={cd3} title="ProGain" duration="6 Month" disc1="Flexible Hours" disc2="Mon-Sat" price={`Only ₹${700 * 6}`} />
+            <Cards img={cd4} title="PowerPack" duration="12 Month" disc1="Flexible Hours" disc2="Mon-Sat" price={`Only ₹${700 * 12}`} />
           </div>
         </div>
         <div>

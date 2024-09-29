@@ -4,8 +4,15 @@ import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
+import Cookies from 'js-cookie';
+import { useRouter } from "next/navigation";
 
 const SignUp = () => {
+  const router = useRouter()
+  const cookie = Cookies.get('Token')
+  if (cookie) {
+    router.push("/profile")
+  }
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",

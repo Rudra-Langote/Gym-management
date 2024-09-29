@@ -2,20 +2,26 @@ import { Connect } from "@/dbConfig/dbconfig";
 import { jwtdata } from "@/helpers/jwtdata";
 import Member from "@/models/memberModel";
 import User from "@/models/userModel";
-import axios from "axios";
 import { NextResponse } from "next/server";
 
 Connect()
 
 export async function POST(req) {
     try {
+
         const body = await req.json()
         const { firstName, lastName, phoneNumber, email, gender, duration, amount } = body
-        const data = jwtdata(req)
-        const existingUser = await User.findOne({ email: data.email });
+        var existingUser
+        if (Object.keys(body).length === 0) {
+            const data = jwtdata(req)
+            console.log(data.email)
+            existingUser = await User.findOne({ email: data.email });
+            
 
+        }
 
-        console.log(existingUser)
+        console.log(body)
+
 
         if (existingUser) {
 
@@ -28,9 +34,9 @@ export async function POST(req) {
                         }, {
                             status: 208
                         })
-                    } else {
+                    } else if (existingMember.isMember != true) {
                         try {
-                            await Member.updateOne({ email: existingMember.email }, {
+                            await Member.updateOne({ email: existingUser.email }, {
                                 $set: {
                                     isMember: true,
                                     startDate: Date.now(),
@@ -39,7 +45,7 @@ export async function POST(req) {
                                 }
                             })
                             return NextResponse.json({
-                                message: "Successs"
+                                message: "Success"
                             }, {
                                 status: 200
                             })
@@ -88,9 +94,9 @@ export async function POST(req) {
                         }, {
                             status: 208
                         })
-                    } else {
+                    } else if (existingMember.isMember != true) {
                         try {
-                            await Member.updateOne({ email: existingMember.email }, {
+                            await Member.updateOne({ email }, {
                                 $set: {
                                     isMember: true,
                                     startDate: Date.now(),
@@ -99,7 +105,7 @@ export async function POST(req) {
                                 }
                             })
                             return NextResponse.json({
-                                message: "Sucsss 2"
+                                message: "Sucsss"
                             }, {
                                 status: 400
                             })
