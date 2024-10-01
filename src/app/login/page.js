@@ -7,7 +7,9 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 
+
 const Login = () => {
+
   const router = useRouter()
   const cookie = Cookies.get('Token')
   if (cookie) {
@@ -26,12 +28,17 @@ const Login = () => {
         })
       )
       toast.success(res.data.message)
+
+      router.push('/profile')
+
     } catch (error) {
 
       toast.error(error.response.data.error)
     }
 
+
   };
+ 
 
   const handleForgotPassword = () => {
     router.push("/forgotpassword");
@@ -45,7 +52,7 @@ const Login = () => {
         <h2 className="text-2xl font-bold text-center mb-6 text-white">
           Login to Your Account
         </h2>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
@@ -65,7 +72,7 @@ const Login = () => {
             />
           </div>
 
-          {/* Password Input */}
+
           <div className="mb-6">
             <label
               htmlFor="password"
@@ -84,7 +91,7 @@ const Login = () => {
             />
           </div>
 
-          {/* Login Button */}
+
           <button
             type="submit"
             className="w-full py-2 px-4 bg-yellow-500 text-white font-bold rounded-md hover:bg-yellow-600 transition duration-300"
@@ -93,7 +100,6 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Forgot Password Link */}
         <div className="mt-4 text-center">
           <button
             onClick={handleForgotPassword}

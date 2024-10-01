@@ -8,7 +8,7 @@ Connect()
 export async function POST(req) {
     try {
         const data = jwtdata(req)
-        const existingUser = await User.findOne({ email: data.email }).select("-password").select("-isVerified").select("-__v").select("-isAdmin").select("-_id");
+        const existingUser = await User.findOne({ email: data.email }).select("-password").select("-isVerified").select("-__v").select("-email").select("-isAdmin").select("-_id");
         return NextResponse.json({
             user: existingUser
         }, {
@@ -44,7 +44,7 @@ export async function PUT(req) {
 
 
         return NextResponse.json({
-            user: await User.findOne({ email: data.email }).select("-password")
+            message: "Details Update"
         }, {
             status: 200
         })

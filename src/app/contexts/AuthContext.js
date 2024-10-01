@@ -1,4 +1,5 @@
 'use client'
+import Cookies from "js-cookie";
 import { createContext, useContext, useState, useEffect } from "react";
 
  const AuthContext = createContext()
@@ -7,7 +8,7 @@ export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        const user = localStorage.getItem('Token')
+        const user = Cookies.get('Token')
         if (user) {
             setIsLoggedIn(true)
         }

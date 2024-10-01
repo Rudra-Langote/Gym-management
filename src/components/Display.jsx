@@ -1,14 +1,14 @@
-"use client"
+"use client";
 import { useRouter } from 'next/navigation';
-import React from 'react'
+import React from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
 
 const Display = () => {
-    const router = useRouter()
+    const router = useRouter();
     const { isLoggedIn } = useAuth();
+    console.log(isLoggedIn)
 
     const sendSignup = () => {
-
         router.push("/signup");
     };
 
@@ -16,9 +16,8 @@ const Display = () => {
         router.push("/login");
     };
 
-
     return (
-        <div id='Top' className="relative h-screen overflow-hidden">
+        <div id="Top" className="relative h-screen overflow-hidden">
             <video
                 autoPlay
                 loop
@@ -29,35 +28,53 @@ const Display = () => {
                 Your browser does not support the video tag.
             </video>
 
-
-            <div className="relative z-10 flex flex-col md:gap-[30px] items-center justify-center h-full">
-                <div className='   relative  text-3xl  md:text-5xl h-[11%] w-[90%] md:h-[17%] md:w-[45%]'>
-                    <h1 className="text-white  absolute left-0 top-0 font-bold">Once You See <span className=' text-yellow-500'>Results</span></h1>
-                    <h1 className="text-white  absolute right-0 bottom-0  font-bold">It <span className=' text-yellow-500'>Becomes</span> An Addiction</h1>
+            <div className="relative z-10 flex flex-col items-center justify-center h-full px-4">
+                <div className="relative text-center text-2xl md:text-5xl mb-8 px-4 w-full max-w-2xl">
+                    <h1 className="text-white font-bold">
+                        Once You See <span className="text-yellow-500">Results</span>
+                    </h1>
+                    <h1 className="text-white font-bold mt-4 md:mt-2">
+                        It <span className="text-yellow-500">Becomes</span> An Addiction
+                    </h1>
                 </div>
 
-                <div className=' relative bottom-0 flex justify-center items-center p-2 h-[17%] md:w-[45%]'>
-                    <ul className=' flex gap-[40px] md:gap-[90px] list-disc text-white text-md md:text-xl'>
-                        <li className=' text-yellow-500'>Strength</li>
+                <div className="relative flex justify-center items-center mb-8">
+                    <ul className="flex list-disc flex-wrap gap-8 md:gap-16 text-white text-lg md:text-xl">
+                        <li className="text-yellow-500">Strength</li>
                         <li>Endurance</li>
-                        <li className=' text-yellow-500'>Performance</li>
+                        <li className="text-yellow-500">Performance</li>
                     </ul>
                 </div>
 
+                {isLoggedIn ? (
+                    <div className="flex flex-col items-center text-5xl md:text-6xl font-bold mt-8">
+                        <span className="underline text-yellow-500">RK</span>
+                        <span className="text-white underline text-3xl md:text-4xl">FITNESS</span>
+                    </div>
 
-                {isLoggedIn ? <div className='  md:mt-[50px] relative flex gap-[50px] items-center justify-center w-[90%]  h-[15%] md:h-[10%] md:w-[45%]'>
-                    <button onClick={sendSignup} className=' md:p-2 text-center border-yellow-500 bg-yellow-500 rounded-sm hover:bg-white hover:text-black hover:border-0 border-[2px] duration-[0.3s] text-white h-[40%] w-[40%] md:h-[70%] md:w-[25%]'>Be a Member</button>
-                    <button onClick={sendLogin} className=' md:p-2 border-2 rounded-sm text-white hover:bg-white hover:text-black  h-[40%] w-[40%] md:h-[70%] md:w-[25%] duration-[0.3s]'>Allread a Member</button>
-                </div> : <div className='  md:mt-[50px] relative flex flex-col text-5xl items-center justify-center w-[50%]  h-[20%] md:h-[20%] md:w-[20%]'>
-                    <span className=' underline font-bold text-yellow-500' >RK</span>
-                    <span className=' text-white  underline text-3xl font-bold'>FITNESS</span>
-                </div>}
+                ) : (
 
+                    <div className="flex flex-wrap gap-4 md:gap-10 items-center justify-center w-full max-w-xl">
+                        <button
+                            onClick={sendSignup}
+                            className="px-6 py-3 md:px-8 md:py-4 text-white bg-yellow-500 border-2 border-yellow-500 rounded-md hover:bg-white hover:text-black duration-300"
+                        >
+                            Be a Member
+                        </button>
+                        <button
+                            onClick={sendLogin}
+                            className="px-6 py-3 md:px-8 md:py-4 text-white border-2 border-white rounded-md hover:bg-white hover:text-black duration-300"
+                        >
+                            Already a Member
+                        </button>
+                    </div>
+                )}
             </div>
-            <div className="absolute inset-0 bg-black opacity-50 z-5"></div>
+
+
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-950 opacity-90"></div>
         </div>
+    );
+};
 
-    )
-}
-
-export default Display
+export default Display;

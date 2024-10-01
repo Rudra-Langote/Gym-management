@@ -2,6 +2,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaUserCircle, FaClipboardList } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState("userInfo");
@@ -15,54 +17,46 @@ const Profile = () => {
         gender: "",
     });
 
-    
-    
     const [membership, setMembership] = useState({
-        duration : null,
-        startDate : null,
-        endDate : null,
-        isMember : false
-
+        duration: null,
+        startDate: null,
+        endDate: null,
+        isMember: false,
     });
-    
 
-
-    // Fetch user data when the component mounts
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await axios.post('/api/users/profile');
-                console.log(res)
-                setUserInfo(res.data.user); // Assuming the API returns user data
+                const res = await axios.post("/api/users/profile");
+                setUserInfo(res.data.user);
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
         };
-        const fetchMember = async () =>{
+        const fetchMember = async () => {
             try {
-                const res = await axios.post('/api/memberfind');
-                console.log(res)
-                setMembership(res.data.member); // Assuming the API returns user data
+                const res = await axios.post("/api/memberfind");
+                setMembership(res.data.member);
             } catch (error) {
-                console.error("Error fetching user data:", error);
+                console.error("Error fetching membership data:", error);
             }
-        }
-        
-        fetchMember();
+        };
+
         fetchUser();
+        fetchMember();
     }, []);
 
     const startDate = new Date(membership.startDate);
     const endDate = new Date(membership.endDate);
     const options = {
-        year: 'numeric',
-        month: 'long', // Full month name; use '2-digit' for numeric month
-        day: 'numeric',
-        timeZone: 'Asia/Kolkata', // Set the time zone to India
-        hour12: true, // Use 12-hour clock
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "Asia/Kolkata",
+        hour12: true,
     };
-    const formattedStartDate = startDate.toLocaleString('en-IN', options);
-    const formattedEndDate = endDate.toLocaleString('en-IN', options);
+    const formattedStartDate = startDate.toLocaleString("en-IN", options);
+    const formattedEndDate = endDate.toLocaleString("en-IN", options);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -70,8 +64,6 @@ const Profile = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
-        // Convert age and phoneNumber to numbers when input changes
         const updatedValue = name === "age" || name === "phoneNumber" ? Number(value) : value;
 
         setUserInfo((prev) => ({
@@ -80,24 +72,44 @@ const Profile = () => {
         }));
     };
 
-    const handleSaveDetails = () => {
-        // Placeholder: Add functionality to save user details
-        console.log("Details saved:", userInfo);
+    const handleSaveDetails = async () => {
+        try {
+            const res = await axios.put('api/users/profile',
+                JSON.stringify(userInfo) 
+            )
+            
+            toast.success(res.data.message)
+        } catch (error) {
+            
+            toast.error(response.data.error)
+        }
     };
 
-    const handleLogout = () => {
-        // Placeholder: Add logout functionality
-        console.log("User logged out");
+    const handleLogout = async () => {
+        try {
+            const res = await axios.get('api/users/logout')
+            toast.success(res.data.message)
+        } catch (error) {
+            toast.error(response.data.error)
+        }
+    };
+
+    const handleDeleteAccount = async () => {
+        try {
+            const res = await axios.delete('api/users/profile')
+            toast.success(res.data.message)
+        } catch (error) {
+            toast.error(response.data.error)
+        }
     };
 
     return (
         <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-gray-900 to-gray-950 text-white p-8">
+            <ToastContainer/>
             <div className="bg-gray-800 p-8 mt-20 rounded-3xl shadow-2xl w-full max-w-5xl transform transition-all duration-500 hover:scale-105">
                 <h2 className="text-4xl font-bold text-center mb-8 text-yellow-500 drop-shadow-lg">
                     Profile
                 </h2>
-
-                {/* Tabs */}
                 <div className="flex justify-center mb-8">
                     <button
                         onClick={() => handleTabChange("userInfo")}
@@ -107,7 +119,7 @@ const Profile = () => {
                             }`}
                     >
                         <FaUserCircle className="mr-2 text-2xl" />
-                        User Information
+                        Information
                     </button>
                     <button
                         onClick={() => handleTabChange("membershipStatus")}
@@ -121,11 +133,9 @@ const Profile = () => {
                     </button>
                 </div>
 
-                {/* Card Container */}
                 <div className="bg-gray-700 p-8 rounded-b-3xl shadow-2xl">
                     {activeTab === "userInfo" ? (
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            {/* User Information Cards */}
                             {Object.keys(userInfo).map((key) => (
                                 <div
                                     key={key}
@@ -135,20 +145,20 @@ const Profile = () => {
                                         {key.replace(/([A-Z])/g, " $1")}
                                     </h3>
                                     <input
-                                        type={key === "age" || key === "phoneNumber" ? "number" : "text"} // Use number input for age and phoneNumber
+                                        type={key === "age" ? "number" : "text" || key === "phoneNumber" ? "tel" : "text"}
                                         name={key}
-                                        value={userInfo[key] || ''} // Prevent uncontrolled input warnings
+                                        value={userInfo[key] || ""}
                                         onChange={handleInputChange}
                                         className="bg-gray-700 text-gray-300 p-2 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                                        min={key === "age" ? "7" : undefined} // Prevent negative numbers for age
+                                        min={key === "age" ? "7" : undefined}
                                     />
                                 </div>
+
                             ))}
                         </div>
                     ) : (
                         <div className="grid gap-6 lg:grid-cols-2">
-                            {/* Membership Status Cards */}
-                            {membership ? (
+                            {membership.isMember ? (
                                 <>
                                     <div className="p-6 bg-gray-800 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl">
                                         <h3 className="text-lg font-semibold mb-2 text-yellow-400">
@@ -156,29 +166,24 @@ const Profile = () => {
                                         </h3>
                                         <p className="text-gray-300">{membership.duration} Months</p>
                                     </div>
-
                                     <div className="p-6 bg-gray-800 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl">
                                         <h3 className="text-lg font-semibold mb-2 text-yellow-400">
                                             Status
                                         </h3>
-                                        <p className="text-gray-300">{membership.isMember === true? "Active" : "Expired"}</p>
+                                        <p className="text-gray-300">Active</p>
                                     </div>
-
                                     <div className="p-6 bg-gray-800 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl">
                                         <h3 className="text-lg font-semibold mb-2 text-yellow-400">
                                             Start Date
                                         </h3>
                                         <p className="text-gray-300">{formattedStartDate}</p>
                                     </div>
-
                                     <div className="p-6 bg-gray-800 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl">
                                         <h3 className="text-lg font-semibold mb-2 text-yellow-400">
                                             End Date
                                         </h3>
                                         <p className="text-gray-300">{formattedEndDate}</p>
                                     </div>
-
-                                    
                                 </>
                             ) : (
                                 <div className="p-6 bg-gray-800 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl col-span-full">
@@ -191,23 +196,47 @@ const Profile = () => {
                         </div>
                     )}
 
-                    {/* Action Buttons */}
-                    {activeTab === "userInfo" && (
-                        <div className="mt-8 flex justify-between">
-                            <button
-                                onClick={handleSaveDetails}
-                                className="bg-yellow-500 text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
-                            >
-                                Save Details
-                            </button>
-                            <button
-                                onClick={handleLogout}
-                                className="bg-red-500 text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
-                            >
-                                Logout
-                            </button>
-                        </div>
-                    )}
+                    <div className="mt-8 flex flex-col gap-4 md:flex-row justify-between">
+                        {activeTab === "userInfo" && (
+                            <>
+                                <button
+                                    onClick={handleSaveDetails}
+                                    className="bg-yellow-500 text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+                                >
+                                    Save Details
+                                </button>
+                                <button
+                                    onClick={handleLogout}
+                                    className="bg-red-500 text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+                                >
+                                    Logout
+                                </button>
+                                <button
+                                    onClick={handleDeleteAccount}
+                                    className="bg-gray-900 text-red-500 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+                                >
+                                    Delete Account
+                                </button>
+                            </>
+                        )}
+                        {activeTab === "membershipStatus" && !membership.isMember && (
+                            <>
+                                <button
+                                    onClick={handleSaveDetails}
+                                    className="bg-yellow-500 text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+                                >
+                                    Renew Pack
+                                </button>
+                                <button
+                                    onClick={handleSaveDetails}
+                                    className="bg-yellow-500 text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+                                >
+                                    Buy New Pack
+                                </button>
+                            </>
+
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
