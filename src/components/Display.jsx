@@ -1,12 +1,15 @@
 "use client";
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '@/app/contexts/AuthContext';
 
 const Display = () => {
     const router = useRouter();
+
     const { isLoggedIn } = useAuth();
     console.log(isLoggedIn)
+
+
 
     const sendSignup = () => {
         router.push("/signup");
@@ -14,6 +17,7 @@ const Display = () => {
 
     const sendLogin = () => {
         router.push("/login");
+        
     };
 
     return (

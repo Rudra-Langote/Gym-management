@@ -6,9 +6,12 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
+import { useAuth } from "../contexts/AuthContext";
+
 
 
 const Login = () => {
+  const { setIsLoggedIn } = useAuth()
 
   const router = useRouter()
   const cookie = Cookies.get('Token')
@@ -28,6 +31,7 @@ const Login = () => {
         })
       )
       toast.success(res.data.message)
+      setIsLoggedIn(true)
 
       router.push('/profile')
 

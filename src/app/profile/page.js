@@ -4,9 +4,13 @@ import React, { useEffect, useState } from "react";
 import { FaUserCircle, FaClipboardList } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
+import { useRouter } from "next/navigation";
+import { useAuth } from "../contexts/AuthContext";
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState("userInfo");
+    const router = useRouter()
+    const { setIsLoggedIn } = useAuth()
     const [userInfo, setUserInfo] = useState({
         firstName: "",
         lastName: "",
@@ -89,6 +93,8 @@ const Profile = () => {
         try {
             const res = await axios.get('api/users/logout')
             toast.success(res.data.message)
+            setIsLoggedIn(false)
+            router.push('/')
         } catch (error) {
             toast.error(response.data.error)
         }
@@ -102,6 +108,9 @@ const Profile = () => {
             toast.error(response.data.error)
         }
     };
+    const handleNewPack = async () =>{
+        router.push('/#Package')
+    }
 
     return (
         <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-gray-900 to-gray-950 text-white p-8">
@@ -228,7 +237,7 @@ const Profile = () => {
                                     Renew Pack
                                 </button>
                                 <button
-                                    onClick={handleSaveDetails}
+                                    onClick={handleNewPack}
                                     className="bg-yellow-500 text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
                                 >
                                     Buy New Pack

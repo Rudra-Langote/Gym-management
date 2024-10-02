@@ -2,7 +2,7 @@
 import Cookies from "js-cookie";
 import { createContext, useContext, useState, useEffect } from "react";
 
- const AuthContext = createContext()
+const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
         if (user) {
             setIsLoggedIn(true)
         }
-    }, []);
+    });
     return (
         <AuthContext.Provider
             value={{ isLoggedIn, setIsLoggedIn }}>
