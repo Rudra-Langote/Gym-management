@@ -8,6 +8,7 @@ Connect()
 export async function DELETE(req) {
     try {
         const body = await req.json()
+        console.log(body)
         const { email } = body
         await Member.findOneAndDelete({ email });
         return NextResponse.json({
@@ -29,13 +30,13 @@ export async function POST(req) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        const result = await Member.updateMany(
+        await Member.updateMany(
             { endDate: { $gte: today, $lt: new Date(today.getTime() + 86400000) } },
             { $set: { isMember: false } }
         );
 
         return NextResponse.json({
-            user: result
+            message : "Data Updated"
         }, {
             status: 200
         })
@@ -53,6 +54,8 @@ export async function PUT(req) {
 
     try {
         const body = await req.json()
+        console.log(body)
+        
         const { email, duration } = body
         await Member.updateOne({ email }, {
             $set: {
@@ -63,7 +66,7 @@ export async function PUT(req) {
             }
         })
         return NextResponse.json({
-            message: "Membership renewed"
+            message: "renewed"
         }, {
             status: 200
         })

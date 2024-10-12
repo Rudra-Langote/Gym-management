@@ -37,7 +37,7 @@ const Login = () => {
 
     } catch (error) {
 
-      toast.error(error.response.data.error)
+      toast.error(error.response.data.error || "Error")
     }
 
 
@@ -46,7 +46,6 @@ const Login = () => {
 
   const handleForgotPassword = () => {
     router.push("/forgotpassword");
-    console.log("Forgot Password clicked");
   };
 
   return (

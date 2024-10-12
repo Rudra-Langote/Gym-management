@@ -7,9 +7,6 @@ const Display = () => {
     const router = useRouter();
 
     const { isLoggedIn } = useAuth();
-    console.log(isLoggedIn)
-
-
 
     const sendSignup = () => {
         router.push("/signup");

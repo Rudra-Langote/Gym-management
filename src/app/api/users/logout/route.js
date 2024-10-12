@@ -11,6 +11,7 @@ export async function GET() {
     });
 
     response.cookies.set("Token","",{expires: new Date(0)})
+    response.cookies.set("Admin","",{expires: new Date(0)})
     return response 
 
 }

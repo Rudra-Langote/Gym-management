@@ -9,7 +9,6 @@ const memberSchems = new  mongoose.Schema({
     duration : { type : Number, required : true},
     startDate : { type : Date, required : true, default : Date.now},
     endDate : {type : Date},
-    amount : { type :Number, required : true},
     isMember : { type : Boolean, default : true}
 })
 

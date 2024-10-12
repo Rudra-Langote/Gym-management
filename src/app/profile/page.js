@@ -6,20 +6,27 @@ import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 import { useRouter } from "next/navigation";
 import { useAuth } from "../contexts/AuthContext";
+import Script from "next/script";
+
 
 const Profile = () => {
+
     const [activeTab, setActiveTab] = useState("userInfo");
     const router = useRouter()
     const { setIsLoggedIn } = useAuth()
     const [userInfo, setUserInfo] = useState({
         firstName: "",
         lastName: "",
-        email: "",
         phoneNumber: undefined,
         address: "",
         age: undefined,
         gender: "",
+        email: ""
     });
+
+    const [isProcessing, setIsProcessing] = useState(false)
+    const [Amount, setAmount] = useState(0)
+
 
     const [membership, setMembership] = useState({
         duration: null,
@@ -41,6 +48,18 @@ const Profile = () => {
             try {
                 const res = await axios.post("/api/memberfind");
                 setMembership(res.data.member);
+                if (res.data.member.duration == 1) {
+                    setAmount(700)
+                }
+                else if (res.data.member.duration == 3) {
+                    setAmount(700 * 3)
+                }
+                else if (res.data.member.duration == 6) {
+                    setAmount(700 * 6)
+                }
+                else if (res.data.member.duration == 12) {
+                    setAmount(700 * 12)
+                }
             } catch (error) {
                 console.error("Error fetching membership data:", error);
             }
@@ -79,12 +98,12 @@ const Profile = () => {
     const handleSaveDetails = async () => {
         try {
             const res = await axios.put('api/users/profile',
-                JSON.stringify(userInfo) 
+                JSON.stringify(userInfo)
             )
-            
+
             toast.success(res.data.message)
         } catch (error) {
-            
+
             toast.error(response.data.error)
         }
     };
@@ -108,13 +127,60 @@ const Profile = () => {
             toast.error(response.data.error)
         }
     };
-    const handleNewPack = async () =>{
+    const handleNewPack = async () => {
         router.push('/#Package')
+    }
+
+    const handlePayment = async () => {
+        setIsProcessing(true);
+
+
+        try {
+            const data = await axios.post(`/api/payment`,
+                JSON.stringify({ amount: Amount * 100 })
+            );
+
+            const options = {
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                amount: Amount * 100,
+                currency: "INR",
+                name: "RK Fitness",
+                description: "Package Booked",
+                order_id: data.orderId,
+                handler: async function (response) {
+                    console.log("Payment Successful", response);
+                    handleRenewPack()
+                },
+                theme: {
+                    color: "#3399cc"
+                }
+            };
+            const rzp1 = new window.Razorpay(options);
+            rzp1.open();
+        } catch (error) {
+            console.error("Error in Payment:", error);
+            // toast.error(error.response.data.error)
+        } finally {
+            setIsProcessing(false);
+        }
+
+
+    };
+    const handleRenewPack = async () => {
+        try {
+            const res = await axios.put('api/member',
+                JSON.stringify({ email: userInfo.email, duration: membership.duration })
+            )
+            toast.success(res.data.message)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
         <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-gray-900 to-gray-950 text-white p-8">
-            <ToastContainer/>
+             <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+            <ToastContainer />
             <div className="bg-gray-800 p-8 mt-20 rounded-3xl shadow-2xl w-full max-w-5xl transform transition-all duration-500 hover:scale-105">
                 <h2 className="text-4xl font-bold text-center mb-8 text-yellow-500 drop-shadow-lg">
                     Profile
@@ -145,7 +211,7 @@ const Profile = () => {
                 <div className="bg-gray-700 p-8 rounded-b-3xl shadow-2xl">
                     {activeTab === "userInfo" ? (
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            {Object.keys(userInfo).map((key) => (
+                            {Object.keys(userInfo).filter((key) => key !== "email").map((key) => (
                                 <div
                                     key={key}
                                     className="p-6 bg-gray-800 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
@@ -231,7 +297,7 @@ const Profile = () => {
                         {activeTab === "membershipStatus" && !membership.isMember && (
                             <>
                                 <button
-                                    onClick={handleSaveDetails}
+                                    onClick={handlePayment}
                                     className="bg-yellow-500 text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
                                 >
                                     Renew Pack

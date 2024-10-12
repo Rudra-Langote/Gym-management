@@ -1,15 +1,43 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { useAuth } from '@/app/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
+import jwt from 'jsonwebtoken'
+import { jwtdata } from '@/helpers/jwtdata';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
 
 const Header = () => {
-  const router = useRouter();
+  
   const { isLoggedIn } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  // const [User, setUser] = useState({})
+  const [isAdmin, setIsAdmin] = useState(false)
+ 
+  
+  useEffect(() => {
+    const handelUserFind = async () => {
+      try {
+        const cookie = Cookies.get('Admin')
+        if (cookie) {
+          setIsAdmin(true)
+        }      
+      } catch (error) {
+
+      }
+
+    }
+
+    handelUserFind()
+  }, [])
+  const handelDataUpdate = async() =>{
+    await axios.post('api/member')
+  }
+
+
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -21,11 +49,12 @@ const Header = () => {
         </div>
         <div className=' flex justify-center items-center  p-2'>
           <ul className=' hidden md:flex gap-[50px] text-white text-xl'>
-            <Link href={'/'}><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>Home</li></Link>
-            <Link href="#Blog"><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>About</li></Link>
-            <Link href="#Package"><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>Packegs</li></Link>
-            <Link href="#Service"><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>Service</li></Link>
-            {isLoggedIn && <Link href="/profile"><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>Profile</li></Link>}
+            <Link onClick={handelDataUpdate} href={'/'}><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>Home</li></Link>
+            {isLoggedIn && isAdmin ? <Link href="/dashboard"><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>Dashboard</li></Link> : <></>}
+            <Link href="/#Blog"><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>About</li></Link>
+            <Link href="/#Package"><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>Packegs</li></Link>
+            <Link href="/#Service"><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>Service</li></Link>
+            {isLoggedIn && <Link onClick={handelDataUpdate} href="/profile"><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>Profile</li></Link>}
           </ul>
           <ul className='text-white text-2xl md:hidden flex justify-center items-center' >
             <li onClick={toggleDropdown} className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '><i className="fa-solid fa-bars"></i></li>
@@ -38,11 +67,14 @@ const Header = () => {
                 {isLoggedIn && <Link href="/profile"><li className=' cursor-pointer hover:text-yellow-500 duration-[0.3s] '>Profile</li></Link>}
               </ul>
             )}
-        </ul>
-    </div>
+          </ul>
+        </div>
       </nav >
     </div >
   )
 }
 
 export default Header
+
+
+

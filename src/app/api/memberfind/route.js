@@ -26,3 +26,21 @@ export async function POST(req) {
         })
     }
 }
+
+export async function GET(){
+    try {
+        const Members = await Member.find()
+        return NextResponse.json({
+            member: Members
+        }, {
+            status: 200
+        })
+
+    } catch (error) {
+        return NextResponse.json({
+            error: error.message
+        }, {
+            status: 500
+        })
+    }
+}

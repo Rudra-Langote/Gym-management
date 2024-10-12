@@ -2,7 +2,7 @@ import { Connect } from "@/dbConfig/dbconfig";
 import User from "@/models/userModel";
 import { NextResponse } from "next/server";
 import bycript from 'bcryptjs'
-import  jwt  from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { sendEmail } from "@/helpers/mailer";
 
 
@@ -28,36 +28,42 @@ export async function POST(req, res) {
             return NextResponse.json({
                 error: "Wrong Credentials"
             },
-            {
-                status: 400
-            })
+                {
+                    status: 400
+                })
         }
-        else if(!existinguser.isVerified){
-            await sendEmail({email: email, emailType: "VERIFY", userId: existinguser._id })
+        else if (!existinguser.isVerified) {
+            await sendEmail({ email: email, emailType: "VERIFY", userId: existinguser._id })
             return NextResponse.json({
                 error: "User not vefied"
             },
-            {
-                status: 400
-            })
+                {
+                    status: 400
+                })
         }
 
         const tokenData = {
             id: existinguser._id,
-            email: existinguser.email,
-            isAdmin : existinguser.isAdmin
+            email: existinguser.email
+        }
+        const admin = {
+            admin: existinguser.isAdmin
         }
         const token = jwt.sign(tokenData, process.env.TOCAN_SECRET, { expiresIn: '5d' })
+
         const response = NextResponse.json({
             message: "Loggedin"
-        },{
+        }, {
             status: 200
         });
 
-        response.cookies.set("Token",token)
-        return response    
+        if (existinguser.isAdmin) {
+            const isadmin = jwt.sign(admin, process.env.TOCAN_SECRET, { expiresIn: '5d' })
+            response.cookies.set("Admin", isadmin)
+        }
 
-
+        response.cookies.set("Token", token)
+        return response
 
 
     } catch (error) {

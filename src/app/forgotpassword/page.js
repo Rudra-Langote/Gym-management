@@ -15,7 +15,6 @@ const ForgotPassword = () => {
             const res = await axios.post('/api/users/forgotpassword',
                 JSON.stringify({ email: email })
             )
-            console.log(res)
             toast.success(res.data.message)
 
         } catch (error) {

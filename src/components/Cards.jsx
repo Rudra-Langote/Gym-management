@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useAuth } from '@/app/contexts/AuthContext'
+import {  toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 import { useRouter } from 'next/navigation';
-
 import axios from "axios";
 import Script from 'next/script';
 
@@ -14,39 +15,60 @@ const Cards = ({ img, title, duration, disc1, disc2, price }) => {
     const router = useRouter();
     const { isLoggedIn } = useAuth();
 
+
+
     const handlePayment = async () => {
         setIsProcessing(true);
         if (!isLoggedIn) {
             router.push('/signup')
         }
-        else {
-            try {
-                const data = await axios.post(`/api/payment`,
-                    JSON.stringify({ amount: Amount * 100 })
-                );
-
-                const options = {
-                    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-                    amount: Amount * 100,
-                    currency: "INR",
-                    name: "RK Fitness",
-                    description: "Package Booked",
-                    order_id: data.orderId,
-                    handler: function (response) {
-                        console.log("Payment Successful", response);
-                    },
-                    theme: {
-                        color: "#3399cc"
-                    }
-                };
-                const rzp1 = new window.Razorpay(options);
-                rzp1.open();
-            } catch (error) {
-                console.error("Error in Payment:", error);
-            } finally {
-                setIsProcessing(false);
+        try {
+            const checkRes = await axios.put(`/api/booking`,
+                JSON.stringify({ duration: duration })
+            );
+            if (checkRes.status == 208) {
+                toast.warning(checkRes.data.message)
             }
+            else {
+                try {
+                    const data = await axios.post(`/api/payment`,
+                        JSON.stringify({ amount: Amount * 100 })
+                    );
+
+                    const options = {
+                        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                        amount: Amount * 100,
+                        currency: "INR",
+                        name: "RK Fitness",
+                        description: "Package Booked",
+                        order_id: data.orderId,
+                        handler: async function (response) {
+                            console.log("Payment Successful", response);
+                            const res = await axios.post('api/booking',
+                                JSON.stringify({ duration: duration })
+                            )
+                            toast.success(res.data.message)
+                        },
+                        theme: {
+                            color: "#3399cc"
+                        }
+                    };
+                    const rzp1 = new window.Razorpay(options);
+                    rzp1.open();
+                } catch (error) {
+                    console.error("Error in Payment:", error);
+                    toast.error(error.response.data.error)
+                }
+
+            }
+
+        } catch (error) {
+            toast.error("hello")
         }
+        finally {
+            setIsProcessing(false);
+        }
+
 
     };
 
@@ -62,6 +84,7 @@ const Cards = ({ img, title, duration, disc1, disc2, price }) => {
     // };
     return (
         <>
+           
             <Script src="https://checkout.razorpay.com/v1/checkout.js" />
             <div className=" overflow-hidden hover:scale-105 hover:z-10 rounded-md duration-500 border relative w-[90%] h-[250px] md:w-[40%] md:h-[45%]">
 
@@ -73,7 +96,7 @@ const Cards = ({ img, title, duration, disc1, disc2, price }) => {
                 <div className=' z-20 w-[40%]  font-bold text-black absolute right-2 top-5'>
                     <h1 className=' mb-2 text-3xl'>{title}</h1>
                     <ul className=' list-disc space-y-1'>
-                        <li>{duration}</li>
+                        <li>{duration} Months</li>
                         <li>{disc1}</li>
                         <li>{disc2}</li>
                         <li>Only ₹{price}</li>
