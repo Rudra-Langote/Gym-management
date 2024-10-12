@@ -11,7 +11,6 @@ export async function POST(req) {
         const body = await req.json()
         const {email} = body
         const user = await User.findOne({email})
-        console.log(user)
         await sendEmail({ email, emailType : "FORGOT", userId : user._id})
         return NextResponse.json(
             { message: "Mail Sent Successfully!!" },

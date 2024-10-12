@@ -16,7 +16,6 @@ const AddMembers = () => {
         gender: "Male",
         duration: 1,
     });
-    console.log(formData)
     
     const [Amount, setAmount] = useState()
     useEffect(()=>{
@@ -59,7 +58,6 @@ const AddMembers = () => {
                         description: "Package Booked",
                         order_id: data.orderId,
                         handler: async function (response) {
-                            console.log("Payment Successful", response);
                             const res = await axios.post('api/booking',
                                 formData
                             )
@@ -81,6 +79,7 @@ const AddMembers = () => {
 
 
         } catch (error) {
+            toast.error(error.response.data.error)
 
         }
         finally {

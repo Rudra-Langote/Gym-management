@@ -16,7 +16,6 @@ const MembersSection = () => {
     handelMember()
   }, [])
   const handelMemberDelete = async (email) => {
-    console.log(email)
     try {
       const res = await axios.delete('api/member', {
         data: { email: email }
@@ -36,7 +35,7 @@ const MembersSection = () => {
     <div>
       <ToastContainer/>
       <h2 className="text-3xl font-bold mb-4">Members</h2>
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+      <div className="bg-gray-800 p-2 md:p-6 rounded-lg shadow-lg">
         <table className="w-full table-auto">
           <thead>
             <tr>

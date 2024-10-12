@@ -10,7 +10,6 @@ export async function POST(req, res) {
     try {
         const body = await req.json();
         const { firstName, lastName, age,gender, email, password, phoneNumber, address } = body
-        console.log(body);
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return NextResponse.json({

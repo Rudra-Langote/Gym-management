@@ -21,7 +21,7 @@ export async function PUT(req) {
           return NextResponse.json({ error: "Invalid token" }, { status: 401 });
         }
   
-        console.log(data.email); // Debug log
+        (data.email); // Debug log
   
         // Find user by email extracted from JWT
         existingUser = await User.findOne({ email: data.email });
@@ -84,11 +84,9 @@ export async function POST(req) {
 
         const body = await req.json()
         const { firstName, lastName, phoneNumber, email, gender, duration } = body
-        console.log(body)
         var existingUser
         if (Object.keys(body).length === 1) {
             const data = jwtdata(req)
-            console.log(data.email)
             existingUser = await User.findOne({ email: data.email });
 
 

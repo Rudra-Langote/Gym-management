@@ -8,7 +8,6 @@ Connect()
 export async function DELETE(req) {
     try {
         const body = await req.json()
-        console.log(body)
         const { email } = body
         await Member.findOneAndDelete({ email });
         return NextResponse.json({
@@ -54,7 +53,6 @@ export async function PUT(req) {
 
     try {
         const body = await req.json()
-        console.log(body)
         
         const { email, duration } = body
         await Member.updateOne({ email }, {

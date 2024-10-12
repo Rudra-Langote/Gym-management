@@ -14,6 +14,9 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState("userInfo");
     const router = useRouter()
     const { setIsLoggedIn } = useAuth()
+    const [formattedStartDate, setformattedStartDate] = useState()
+    const [formattedEndDate, setformattedEndDate] = useState()
+
     const [userInfo, setUserInfo] = useState({
         firstName: "",
         lastName: "",
@@ -47,19 +50,24 @@ const Profile = () => {
         const fetchMember = async () => {
             try {
                 const res = await axios.post("/api/memberfind");
-                setMembership(res.data.member);
-                if (res.data.member.duration == 1) {
-                    setAmount(700)
+                if (res.status === 200) {
+                    setMembership(res.data.member);
+                    const { duration } = res.data.member;
+                    setAmount(700 * duration);
+
+                    const startDate = new Date(res.data.member.startDate);
+                    const endDate = new Date(res.data.member.endDate);
+                    const options = {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        timeZone: "Asia/Kolkata",
+                        hour12: true,
+                    };
+                    setformattedStartDate(startDate.toLocaleString("en-IN", options));
+                    setformattedEndDate(endDate.toLocaleString("en-IN", options));
                 }
-                else if (res.data.member.duration == 3) {
-                    setAmount(700 * 3)
-                }
-                else if (res.data.member.duration == 6) {
-                    setAmount(700 * 6)
-                }
-                else if (res.data.member.duration == 12) {
-                    setAmount(700 * 12)
-                }
+
             } catch (error) {
                 console.error("Error fetching membership data:", error);
             }
@@ -69,17 +77,9 @@ const Profile = () => {
         fetchMember();
     }, []);
 
-    const startDate = new Date(membership.startDate);
-    const endDate = new Date(membership.endDate);
-    const options = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        timeZone: "Asia/Kolkata",
-        hour12: true,
-    };
-    const formattedStartDate = startDate.toLocaleString("en-IN", options);
-    const formattedEndDate = endDate.toLocaleString("en-IN", options);
+    
+
+
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -148,7 +148,6 @@ const Profile = () => {
                 description: "Package Booked",
                 order_id: data.orderId,
                 handler: async function (response) {
-                    console.log("Payment Successful", response);
                     handleRenewPack()
                 },
                 theme: {
@@ -173,22 +172,22 @@ const Profile = () => {
             )
             toast.success(res.data.message)
         } catch (error) {
-            console.log(error)
+            toast.error(error.response.data.error)
         }
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-gray-900 to-gray-950 text-white p-8">
-             <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+        <div className="min-h-screen flex flex-col items-center bg-gradient-to-b from-gray-900 to-gray-950 text-white pt-8 md:p-8">
+            <Script src="https://checkout.razorpay.com/v1/checkout.js" />
             <ToastContainer />
-            <div className="bg-gray-800 p-8 mt-20 rounded-3xl shadow-2xl w-full max-w-5xl transform transition-all duration-500 hover:scale-105">
+            <div className="bg-gray-800 p-2 md:p-8 mt-20 rounded-3xl shadow-2xl w-full max-w-5xl transform transition-all duration-500 hover:scale-105">
                 <h2 className="text-4xl font-bold text-center mb-8 text-yellow-500 drop-shadow-lg">
-                    Profile
+                    Hello, {userInfo.firstName}{userInfo.lastName}
                 </h2>
                 <div className="flex justify-center mb-8">
                     <button
                         onClick={() => handleTabChange("userInfo")}
-                        className={`flex items-center py-3 px-6 rounded-t-lg mx-2 transition duration-500 ${activeTab === "userInfo"
+                        className={`flex items-center p-2 md:py-3 md:px-6 rounded-t-lg mx-2 transition duration-500 ${activeTab === "userInfo"
                             ? "bg-yellow-500 text-gray-900 font-semibold shadow-lg transform scale-105"
                             : "bg-gray-700 hover:bg-yellow-600 hover:scale-105 hover:shadow-lg"
                             }`}
@@ -198,7 +197,7 @@ const Profile = () => {
                     </button>
                     <button
                         onClick={() => handleTabChange("membershipStatus")}
-                        className={`flex items-center py-3 px-6 rounded-t-lg mx-2 transition duration-500 ${activeTab === "membershipStatus"
+                        className={`flex items-center p-2 md:py-3 md:px-6 rounded-t-lg mx-2 transition duration-500 ${activeTab === "membershipStatus"
                             ? "bg-yellow-500 text-gray-900 font-semibold shadow-lg transform scale-105"
                             : "bg-gray-700 hover:bg-yellow-600 hover:scale-105 hover:shadow-lg"
                             }`}
@@ -233,7 +232,7 @@ const Profile = () => {
                         </div>
                     ) : (
                         <div className="grid gap-6 lg:grid-cols-2">
-                            {membership.isMember ? (
+                            {membership?.isMember ? (
                                 <>
                                     <div className="p-6 bg-gray-800 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl">
                                         <h3 className="text-lg font-semibold mb-2 text-yellow-400">
@@ -294,7 +293,7 @@ const Profile = () => {
                                 </button>
                             </>
                         )}
-                        {activeTab === "membershipStatus" && !membership.isMember && (
+                        {activeTab === "membershipStatus" && !membership?.isMember && (
                             <>
                                 <button
                                     onClick={handlePayment}

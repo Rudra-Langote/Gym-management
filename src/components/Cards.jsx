@@ -43,7 +43,6 @@ const Cards = ({ img, title, duration, disc1, disc2, price }) => {
                         description: "Package Booked",
                         order_id: data.orderId,
                         handler: async function (response) {
-                            console.log("Payment Successful", response);
                             const res = await axios.post('api/booking',
                                 JSON.stringify({ duration: duration })
                             )
