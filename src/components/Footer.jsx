@@ -8,40 +8,40 @@ import Link from 'next/link';
 const Footer = () => {
     return (
         <div>
-            <footer class="bg-gray-900 text-white py-8">
-                <div class="container mx-auto flex flex-col md:flex-row text-center justify-center md:justify-between items-center">
+            <footer className="bg-gray-900 text-white py-8">
+                <div className="container mx-auto flex flex-col md:flex-row text-center justify-center md:justify-between items-center">
                     
-                    <div class="mb-4 md:mb-0">
-                        <h2 class="text-xl font-bold mb-2">RK Fitness</h2>
-                        <p class="text-sm">Your journey to health and fitness starts here. Join RK Fitness today for a better tomorrow.</p>
+                    <div className="mb-4 md:mb-0">
+                        <h2 className="text-xl font-bold mb-2">RK Fitness</h2>
+                        <p className="text-sm">Your journey to health and fitness starts here. Join RK Fitness today for a better tomorrow.</p>
                     </div>
 
                     
-                    <div class="mb-4 md:mb-0">
-                        <ul class="flex flex-col md:flex-row gap-4 text-sm">
-                            <li><Link href="#Top" class="hover:text-yellow-500">Home</Link></li>
-                            <li><Link href="#Blog" class="hover:text-yellow-500">About</Link></li>
-                            <li><Link href="#Package" class="hover:text-yellow-500">Package</Link></li>
-                            <li><Link href="#Service" class="hover:text-yellow-500">Service</Link></li>
+                    <div className="mb-4 md:mb-0">
+                        <ul className="flex flex-col md:flex-row gap-4 text-sm">
+                            <li><Link href="#Top" className="hover:text-yellow-500">Home</Link></li>
+                            <li><Link href="#Blog" className="hover:text-yellow-500">About</Link></li>
+                            <li><Link href="#Package" className="hover:text-yellow-500">Package</Link></li>
+                            <li><Link href="#Service" className="hover:text-yellow-500">Service</Link></li>
                         </ul>
                     </div>
 
                     
-                    <div class="mb-4 md:mb-0">
-                        <p class="text-sm"><strong>Address:</strong> 123 Gym Street, City, Country</p>
-                        <p class="text-sm"><strong>Phone:</strong> (123) 456-7890</p>
-                        <p class="text-sm"><strong>Email:</strong> info@RKfitness.com</p>
+                    <div className="mb-4 md:mb-0">
+                        <p className="text-sm"><strong>Address:</strong> 123 Gym Street, City, Country</p>
+                        <p className="text-sm"><strong>Phone:</strong> (123) 456-7890</p>
+                        <p className="text-sm"><strong>Email:</strong> info@RKfitness.com</p>
                     </div>
 
                     
-                    <div class="flex gap-4">
-                        <a href="#" aria-label="Facebook" class="hover:text-yellow-500 text-3xl"><i class="fa-brands fa-square-github"></i></a>
-                        <a href="#" aria-label="Instagram" class="hover:text-yellow-500 text-3xl"><i class="fa-brands fa-linkedin"></i></a>
-                        <a href="#" aria-label="Twitter" class="hover:text-yellow-500 text-3xl"><i class="fa-solid fa-envelope"></i></a>
+                    <div className="flex gap-4">
+                        <a href="#" aria-label="Facebook" className="hover:text-yellow-500 text-3xl"><i className="fa-brands fa-square-github"></i></a>
+                        <a href="#" aria-label="Instagram" className="hover:text-yellow-500 text-3xl"><i className="fa-brands fa-linkedin"></i></a>
+                        <a href="#" aria-label="Twitter" className="hover:text-yellow-500 text-3xl"><i className="fa-solid fa-envelope"></i></a>
                     </div>
                 </div>
 
-                <div class="mt-8 text-center border-t border-gray-700 pt-4 text-xs">
+                <div className="mt-8 text-center border-t border-gray-700 pt-4 text-xs">
                     <p>&copy; 2024 RK Fitness. All Rights Reserved.</p>
                 </div>
             </footer>

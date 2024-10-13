@@ -137,7 +137,7 @@ const Profile = () => {
 
         try {
             const data = await axios.post(`/api/payment`,
-                JSON.stringify({ amount: Amount * 100 })
+                JSON.stringify({ amount: Amount})
             );
 
             const options = {
@@ -149,6 +149,10 @@ const Profile = () => {
                 order_id: data.orderId,
                 handler: async function (response) {
                     handleRenewPack()
+                    const dataa = await axios.put(`/api/payment`,
+                        JSON.stringify({ amount: Amount, duration: membership.duration, id : response.razorpay_payment_id})
+                    );
+                    toast.success(dataa.data.message)
                 },
                 theme: {
                     color: "#3399cc"
@@ -297,10 +301,13 @@ const Profile = () => {
                             <>
                                 <button
                                     onClick={handlePayment}
-                                    className="bg-yellow-500 text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+                                    disabled={isProcessing}
+                                    className={`bg-yellow-500 text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 >
-                                    Renew Pack
+                                    
+                                    {isProcessing ? 'Processing...' : 'Renew Pack'}
                                 </button>
+                                
                                 <button
                                     onClick={handleNewPack}
                                     className="bg-yellow-500 text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105 hover:shadow-2xl"

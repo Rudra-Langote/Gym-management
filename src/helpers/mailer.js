@@ -1,37 +1,37 @@
 import nodemailer from 'nodemailer';
 import User from '../models/userModel';
-import { v1 as uuidv1} from 'uuid'
+import { v1 as uuidv1 } from 'uuid'
 
 
 export const sendEmail = async ({ email, emailType, userId }) => {
 
-    try {
-        const uuidToken = uuidv1();
-        if (emailType === "VERIFY") {
+  try {
+    const uuidToken = uuidv1();
+    if (emailType === "VERIFY") {
 
-            await User.findByIdAndUpdate(userId,
-                { verifiedToken: uuidToken, verifiedTokenExpire: Date.now() + 3600000 })
+      await User.findByIdAndUpdate(userId,
+        { verifiedToken: uuidToken, verifiedTokenExpire: Date.now() + 3600000 })
 
 
-        } else if (emailType === "FORGOT") {
-            await User.findByIdAndUpdate(userId,
-                { frogotPasswordToken: uuidToken, forgotPasswordTokenExpire: Date.now() + 1800000 })
-        }
-        const transport = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            port: 2525,
-            auth: {
-                user: "b0051cdae03aaa",
-                pass: "a2d5c210d66d44"
-            }
-        });
+    } else if (emailType === "FORGOT") {
+      await User.findByIdAndUpdate(userId,
+        { frogotPasswordToken: uuidToken, forgotPasswordTokenExpire: Date.now() + 1800000 })
+    }
+    const transport = nodemailer.createTransport({
+      host: "sandbox.smtp.mailtrap.io",
+      port: 2525,
+      auth: {
+        user: process.env.USER,
+        pass: process.env.PASS
+      }
+    });
 
-        const mailOptions = {
-            from: 'langoterudra2005@gmail.com',
-            to: email,
-            subject: emailType === 'VERIFY' ? "Verify your account" : "Reset your password",
-            text: "Hello world?",
-            html: `<!DOCTYPE html>
+    const mailOptions = {
+      from: 'langoterudra2005@gmail.com',
+      to: email,
+      subject: emailType === 'VERIFY' ? "Verify your account" : "Reset your password",
+      text: "Hello world?",
+      html: `<!DOCTYPE html>
 <html>
 <head>
 
@@ -215,11 +215,14 @@ export const sendEmail = async ({ email, emailType, userId }) => {
 
 </body>
 </html>`,
-        }
-        const info = await transport.sendMail(mailOptions)
-        return info
-
-    } catch (error) {
-        throw new Error(error.message);
     }
+    const info = await transport.sendMail(mailOptions)
+    return info
+
+  } catch (error) {
+    throw new Error(error.message);
+  }
 }
+
+
+

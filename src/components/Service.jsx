@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-const Service = ({ img, head, disc }) => {
+const Service = ({ img, head, disc, alt }) => {
   return (
     <div
       id="Service"
@@ -13,7 +13,7 @@ const Service = ({ img, head, disc }) => {
             height={200}
             quality={100}
             src={img}
-            alt={head}
+            alt={alt}
             className="rounded-lg group-hover:opacity-90"
           />
         </div>

@@ -47,7 +47,7 @@ const AddMembers = () => {
             else {
                 try {
                     const data = await axios.post(`/api/payment`,
-                        JSON.stringify({ amount: Amount * 100 })
+                        JSON.stringify({ amount: Amount})
                     );
 
                     const options = {
@@ -61,7 +61,12 @@ const AddMembers = () => {
                             const res = await axios.post('api/booking',
                                 formData
                             )
+
+                            const data = await axios.put(`/api/payment`,
+                                JSON.stringify({ amount: Amount, duration: formData.duration, customerName : formData.firstName, email : formData.email , id : response.razorpay_payment_id })
+                            );
                             toast.success(res.data.message || "Member added successfully!");
+                            toast.success(data.data.message)
                         },
                         theme: {
                             color: "#3399cc"
@@ -176,11 +181,12 @@ const AddMembers = () => {
                     </div>
 
                     <div className="md:col-span-2">
-                        <button
+                    <button
                             type="submit"
-                            className="w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg transition-all"
+                            className={`w-full py-2 bg-yellow-500 hover:bg-yellow-600 text-black font-bold rounded-lg transition-all ${isProcessing ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={isProcessing}
                         >
-                            Add Member
+                            {isProcessing ? 'Processing...' : 'Add Member'}
                         </button>
                     </div>
                 </form>

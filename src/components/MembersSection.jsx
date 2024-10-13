@@ -21,6 +21,8 @@ const MembersSection = () => {
         data: { email: email }
       })
       toast.success(res.data.message)
+      const mem = await axios.get('api/memberfind')
+      setMembers(mem.data.member)
 
       
     } catch (error) {
