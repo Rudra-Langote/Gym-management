@@ -1,15 +1,17 @@
 "use client";
 import axios from 'axios';
-import { useSearchParams } from 'next/navigation';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 
 const Verify = () => {
   const router = useRouter();
-  const serarchParams = useSearchParams()
-  const token = serarchParams.get('token')
+  const [token, setToken] = useState(null);
+  useEffect(()=>{
+    const tokenFromUrl = window.location.href.split("=")[1];
+    setToken(tokenFromUrl);
+  },[])
   const handleVerify = async () => {
     try {
       const res = await axios.post('/api/users/verifyemail',

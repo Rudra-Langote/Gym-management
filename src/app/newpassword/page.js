@@ -1,18 +1,21 @@
 "use client";
 import axios from 'axios';
-import { useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 
 const SetPassword = () => {
   const router = useRouter()
+  const [token, setToken] = useState(null);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const serarchParams = useSearchParams()
-  const token = serarchParams.get('token')
+
+  useEffect(()=>{
+    const tokenFromUrl = window.location.href.split("=")[1];
+    setToken(tokenFromUrl);
+  },[])
 
   const handleSubmit = async (e) => {
 
