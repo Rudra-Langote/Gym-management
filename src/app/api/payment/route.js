@@ -32,6 +32,7 @@ export async function PUT(req) {
 
     try {
         const body = await req.json()
+        console.log(body)
         const { amount, duration, id , customerName, email } = body;
 
         const data = jwtdata(req)
