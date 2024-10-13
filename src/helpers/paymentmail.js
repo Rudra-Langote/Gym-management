@@ -20,8 +20,8 @@ export const sendEmailForPaymentSuccess = async ({ email, customerName, membersh
         const payDate = paDate.toLocaleString("en-IN", options);
 
         const transport = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            port: 2525,
+            host: "smtp.gmail.com",
+            port: 465,
             auth: {
                 user: process.env.USER,
                 pass: process.env.PASS
@@ -29,7 +29,6 @@ export const sendEmailForPaymentSuccess = async ({ email, customerName, membersh
         });
 
         const mailOptions = {
-            from: 'langoterudra2005@gmail.com',
             to: email,
             subject: "Payment Success",
             text: "Hello world?",

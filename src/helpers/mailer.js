@@ -18,8 +18,8 @@ export const sendEmail = async ({ email, emailType, userId }) => {
         { frogotPasswordToken: uuidToken, forgotPasswordTokenExpire: Date.now() + 1800000 })
     }
     const transport = nodemailer.createTransport({
-      host: "sandbox.smtp.mailtrap.io",
-      port: 2525,
+      host: "smtp.gmail.com",
+      port: 465,
       auth: {
         user: process.env.USER,
         pass: process.env.PASS
@@ -27,7 +27,6 @@ export const sendEmail = async ({ email, emailType, userId }) => {
     });
 
     const mailOptions = {
-      from: 'langoterudra2005@gmail.com',
       to: email,
       subject: emailType === 'VERIFY' ? "Verify your account" : "Reset your password",
       text: "Hello world?",
